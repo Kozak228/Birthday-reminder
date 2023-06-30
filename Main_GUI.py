@@ -178,10 +178,10 @@ class MainWindow(QMainWindow):
             self.show_date(self.ui.calendarWidget.selectedDate())
             
             if len(birth_list) == 1:
-                self.push_notification.show_toast("Birthday reminder", f"У {birth_list[0]} сьогодні День Народження! Не забудь привітати, тобі займе кілька хвилин, а йому (їй) буде приємно :)", 
+                self.push_notification.show_toast(self.dir_name_config, f"У {birth_list[0]} сьогодні День Народження! Не забудь привітати, тобі займе кілька хвилин, а йому (їй) буде приємно :)",
                                                    duration = 120, icon_path = f"{self.path_dir_icons}birth.ico", threaded=True)
             else:
-                self.push_notification.show_toast("Birthday reminder", "У твоїх друзів сьогодні День Народження! Не забудь привітати, тобі займе кілька хвилин, а їм буде приємно :)", 
+                self.push_notification.show_toast(self.dir_name_config, "У твоїх друзів сьогодні День Народження! Не забудь привітати, тобі займе кілька хвилин, а їм буде приємно :)",
                                                    duration = 120, icon_path = f"{self.path_dir_icons}birth.ico", threaded=True)
         else:
             self.setFixedHeight(358)
@@ -233,7 +233,7 @@ class MainWindow(QMainWindow):
         tray_menu.addAction(hide_action)
         tray_menu.addAction(exit_action)
 
-        self.tray_icon.setToolTip("Birthday reminder")
+        self.tray_icon.setToolTip(self.dir_name_config)
         self.tray_icon.setContextMenu(tray_menu)
         self.tray_icon.activated.connect(self.restore_window)
         
@@ -254,7 +254,7 @@ class MainWindow(QMainWindow):
             self.hide()
 
             self.tray_icon.showMessage(
-                "Birthday reminder", "Додаток згорнутий в трей.",
+                self.dir_name_config, "Додаток згорнутий в трей.",
                 QSystemTrayIcon.MessageIcon.Information, 
                 1000)
             
@@ -268,15 +268,14 @@ class MainWindow(QMainWindow):
             self.tray_icon.show()
             self.hide()
 
-            self.tray_icon.showMessage(
-                "Birthday reminder", "Додаток згорнутий в трей.",
+            self.tray_icon.showMessage(self.dir_name_config, "Додаток згорнутий в трей.",
                 QSystemTrayIcon.MessageIcon.Information, 
                 1000)
         elif answ == "close":
             self.exit_app()
 
     def exit_app(self):
-        # write_config(self.data_capture_for_config(), self.file_config, self.path_cofig)
+        write_config(self.data_capture_for_config(), self.file_config, self.path_cofig)
         QApplication.instance().quit
         exit()
 
