@@ -7,7 +7,7 @@ def write_file(dicts, file_name, file_path):
     sorted_dicts = sort_dict(dicts)
 
     try:
-        with open(f'{file_path}{file_name}.json', 'w', encoding='utf8') as f:
+        with open(f'{file_path}{file_name}.json', 'w') as f:
             dump(sorted_dicts, f, indent=4, ensure_ascii=False)
     except Exception as ex:
         log_error(ex)
