@@ -21,6 +21,8 @@ class Update_data(QMainWindow):
         self.setWindowFlags(Qt.WindowType.WindowSystemMenuHint)
         self.setFixedSize(591, 350)
 
+        self.ui.line_date.setInputMask('00.00;_')
+
         self.ui.pushButton_clear_name.setEnabled(False)
         self.ui.pushButton_clear_date.setEnabled(False)
         self.ui.pushButton_update_in_list.setEnabled(False)

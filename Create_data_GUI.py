@@ -20,6 +20,8 @@ class Create_data(QMainWindow):
         self.setWindowFlags(Qt.WindowType.WindowSystemMenuHint)
         self.setFixedSize(465, 320)
 
+        self.ui.line_date.setInputMask('00.00;_')
+
         self.ui.pushButton_clear_path.setEnabled(False)
         self.ui.pushButton_clear_name.setEnabled(False)
         self.ui.pushButton_clear_date.setEnabled(False)
