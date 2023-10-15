@@ -176,6 +176,8 @@ class MainWindow(QMainWindow):
 
         if birth_list:
             self.show_date(self.ui.calendarWidget.selectedDate())
+
+            self.showNormal()
             
             if len(birth_list) == 1:
                 self.push_notification.show_toast(self.dir_name_config, f"У {birth_list[0]} сьогодні День Народження! Не забудь привітати, тобі займе кілька хвилин, а йому (їй) буде приємно :)",
