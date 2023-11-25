@@ -1,21 +1,24 @@
 from json import loads
 
-from Loging_error import log_error
+from logging import getLogger
 
 def read_file(file_name, file_path):
+    logger = getLogger('app.read_file')
+
     try:
         with open(f'{file_path}{file_name}.json') as f:
             slovar = loads(f.read())
 
         return slovar
-
     except FileNotFoundError:
         return {}
     except Exception as ex:
-        log_error(ex)
+        logger.error(ex)
 
 def read_config(file_name, file_path):
+    logger = getLogger('app.read_file')
     data = []
+
     try:
         with open(f'{file_path}{file_name}.ini') as f:
             info = f.readlines()
@@ -30,4 +33,4 @@ def read_config(file_name, file_path):
     except FileNotFoundError:
         return []
     except Exception as ex:
-        log_error(ex)
+        logger.error(ex)

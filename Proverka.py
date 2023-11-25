@@ -46,6 +46,20 @@ def proverka_path_in_config(name_dir, proverka_dir=False):
             path_file += "\\"
             return path_file
 
+def proverka_path_in_log(name_dir):
+    path_file = join(join(environ['USERPROFILE']), 'Documents')
+
+    path_file += "\\"
+
+    path_file += name_dir
+
+    if exists(path_file):
+        path_file += "\\"
+        return path_file
+    else:
+        mkdir(path_file)
+        path_file += "\\"
+        return path_file
 
 def proverka_path_in_icons_dir():
     path_dir = abspath("Icons for app Birthday reminder")

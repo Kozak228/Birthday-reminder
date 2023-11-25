@@ -14,6 +14,7 @@ from Time_date_format import add_zero, s_in_m_s
 from Proverka import proverka_file, proverka_dir, proverka_path_in_config, proverka_path_in_icons_dir
 from Read_file import read_file, read_config
 from Write_file import write_config
+from Loging_error import logger_init
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -26,6 +27,8 @@ class MainWindow(QMainWindow):
         self.dir_name_config = "Birthday reminder"
         self.dict_birth = {}
         self.all_sec = 300
+
+        logger_init('app')
 
         self.setWindowFlags(Qt.WindowType.BypassWindowManagerHint)
         self.setFixedSize(579, 340)

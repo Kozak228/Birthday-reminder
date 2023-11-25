@@ -1,9 +1,14 @@
-from logging import basicConfig, exception
+from logging import getLogger, WARNING, FileHandler, Formatter
 
-from Proverka import proverka_path_in_config
+from Proverka import proverka_path_in_log
 
-def log_error(msg_error):
-    basicConfig(filename='log_errors.log', path=proverka_path_in_config("Birthday reminder", True), format='%(asctime)s | %(levelname)s | %(message)s', datefmt='%d.%m.%Y %I:%M:%S',
-                encoding='utf8')
+def logger_init(name):
+    logger = getLogger(name)
+    format ='%(asctime)s | %(name)s : %(lineno)s | %(levelname)s | %(message)s'
+    logger.setLevel(WARNING)
 
-    exception(msg_error)
+    fh = FileHandler(filename = f'{proverka_path_in_log("Birthday reminder")}logger_errors.log', encoding = 'utf-8')
+    fh.setFormatter(Formatter(format))
+    fh.setLevel(WARNING)
+
+    logger.addHandler(fh)
