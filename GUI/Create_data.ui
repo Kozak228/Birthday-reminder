@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>465</width>
+    <width>487</width>
     <height>320</height>
    </rect>
   </property>
@@ -36,6 +36,7 @@
    <string notr="true">QWidget{
 	background-color: #1E1E1E;
 }
+
 QPushButton{
 	background-color: black;
 	color: yellow;
@@ -55,6 +56,7 @@ QPushButton:disabled{
 	color: #800000;
 	border: none;
 }
+
 QLineEdit{
 	background-color: #DCDCDC;
 	color: 	#000080;
@@ -63,20 +65,24 @@ QLineEdit{
 QLineEdit:focus{
 	border: 3px dashed #800000;
 }
+
 QLabel{
 	color: #FF4500;
 }
+
 QGroupBox{
 	backgrond-color: #696969;
 	color: #7FFF00;
 	border: 1px solid #0000CD;
 }
+
 QRadioButton{
 	color: #FF4500;
 }
 QRadioButton:hover{
 	color: #00FF00;
 }
+
 QTableWidget {
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 black, stop:1 blue);
 	border: 2px solid #FF4500;
@@ -86,7 +92,6 @@ QTableWidget::item {
     border: 5px solid rgba(68, 119, 170, 150);
     background-color:rgba(68, 119, 170, 125);
 }
-
 QHeaderView, QHeaderView::section {
     background-color: rgba(128, 128, 128, 128);
 	color: #00CED1;
@@ -94,6 +99,11 @@ QHeaderView, QHeaderView::section {
 QTableWidget::item:hover {
     border: 2px dashed #00FA9A;
 	color: #00FA9A;
+}
+
+QScrollBar:vertical{
+	width:10px;
+	color: yellow;
 }</string>
   </property>
   <property name="inputMethodHints">
@@ -112,14 +122,14 @@ QTableWidget::item:hover {
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>10</y>
+      <x>240</x>
+      <y>9</y>
       <width>241</width>
       <height>94</height>
      </rect>
     </property>
     <property name="title">
-     <string>Шлях до файлу</string>
+     <string>Шлях для збереження файлу</string>
     </property>
     <widget class="QLineEdit" name="line_path">
      <property name="geometry">
@@ -191,8 +201,8 @@ QTableWidget::item:hover {
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>111</y>
+      <x>240</x>
+      <y>110</y>
       <width>180</width>
       <height>92</height>
      </rect>
@@ -341,7 +351,7 @@ QTableWidget::item:hover {
    <widget class="QPushButton" name="pushButton_exit">
     <property name="geometry">
      <rect>
-      <x>386</x>
+      <x>409</x>
       <y>284</y>
       <width>75</width>
       <height>31</height>
@@ -356,26 +366,56 @@ QTableWidget::item:hover {
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>201</width>
+      <width>220</width>
       <height>192</height>
      </rect>
     </property>
     <property name="midLineWidth">
      <number>1</number>
     </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAsNeeded</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="autoScrollMargin">
+     <number>5</number>
+    </property>
+    <property name="defaultDropAction">
+     <enum>Qt::IgnoreAction</enum>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
+    </property>
+    <property name="verticalScrollMode">
+     <enum>QAbstractItemView::ScrollPerItem</enum>
+    </property>
     <property name="sortingEnabled">
      <bool>true</bool>
     </property>
     <property name="columnCount">
-     <number>1</number>
+     <number>2</number>
     </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>200</number>
+     <number>150</number>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>39</number>
     </attribute>
     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
      <bool>true</bool>
     </attribute>
     <attribute name="verticalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderCascadingSectionResizes">
      <bool>false</bool>
     </attribute>
     <attribute name="verticalHeaderDefaultSectionSize">
@@ -384,9 +424,26 @@ QTableWidget::item:hover {
     <attribute name="verticalHeaderHighlightSections">
      <bool>false</bool>
     </attribute>
+    <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderStretchLastSection">
+     <bool>false</bool>
+    </attribute>
     <column>
      <property name="text">
       <string>Ім'я</string>
+     </property>
+     <property name="textAlignment">
+      <set>AlignCenter</set>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Дата</string>
+     </property>
+     <property name="textAlignment">
+      <set>AlignCenter</set>
      </property>
     </column>
    </widget>

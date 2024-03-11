@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../Icons/birth.ico</normaloff>../Icons/birth.ico</iconset>
+    <normaloff>../Icons for app Birthday reminder/birth.ico</normaloff>../Icons for app Birthday reminder/birth.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget{
@@ -583,22 +583,5 @@ QListView::item{
  <resources>
   <include location="icons.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>groupBox</sender>
-   <signal>clicked()</signal>
-   <receiver>line_path</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>403</x>
-     <y>108</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>417</x>
-     <y>59</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

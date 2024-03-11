@@ -18,7 +18,9 @@ class Create_data(QMainWindow):
         self.file_name = file_name
 
         self.setWindowFlags(Qt.WindowType.WindowSystemMenuHint)
-        self.setFixedSize(465, 320)
+        self.setFixedSize(487, 320)
+
+        self.ui.tableWidget.setColumnWidth(1, 65)
 
         self.ui.line_date.setInputMask('00.00;_')
 
@@ -52,16 +54,15 @@ class Create_data(QMainWindow):
         self.file_path = proverka_dir(path_dir)
         write_file(self.dict_birth, self.file_name, self.file_path)
 
-        self.msg("Information", f"Файл збережено! Запам'ятайте розташування\n{self.file_path}{self.file_name}.json.")
+        self.msg("Information", f"Файл збережено! Розташування\n{self.file_path}{self.file_name}.json.")
 
     def info_add_in_file(self):
         keys = list(self.dict_birth.keys())
         values = list(self.dict_birth.values())
 
-        kol_date = len(keys)
         kol_zapis = sum([len(i) for i in values])
 
-        self.ui.label_info_add_in_file.setText(f"Кількість дат додано: {kol_date};\
+        self.ui.label_info_add_in_file.setText(f"Кількість дат: {len(keys)};\
                                                \nКількість записів: {kol_zapis}.")
 
     def add_in_list(self):
@@ -80,16 +81,30 @@ class Create_data(QMainWindow):
             list_birth = self.dict_birth.get(self.date, [])
             list_birth.append(name)
             self.dict_birth[self.date] = list_birth
-            self.addItems_in_table(list_birth)
+            self.addItems_in_table()
             self.ui.line_name.setText("")
 
             self.info_add_in_file()
 
-    def addItems_in_table(self, items):
-        self.ui.tableWidget.setRowCount(len(items))
-                                        
-        for row, val in enumerate(items):
-            self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(val))
+    def addItems_in_table(self):
+        list_dates = list(self.dict_birth.keys())
+        cnt_all_names = sum([len(i) for i in list(self.dict_birth.values())])
+        self.ui.tableWidget.setRowCount(cnt_all_names)
+
+        if cnt_all_names > 5:
+            self.ui.tableWidget.setColumnWidth(1, 55)
+        else:
+            self.ui.tableWidget.setColumnWidth(1, 65)
+
+        row = 0
+
+        for date in list_dates:
+            list_names = self.dict_birth.get(date, [])
+            for name in list_names:
+                self.ui.tableWidget.setItem(row, 0, QTableWidgetItem(name))
+                self.ui.tableWidget.setItem(row, 1, QTableWidgetItem(date))
+
+                row += 1
 
     def btn_clear_date_in_line(self):
         self.ui.line_date.setText("")
@@ -115,7 +130,6 @@ class Create_data(QMainWindow):
                 flag = True
                 self.ui.line_name.setEnabled(True)
                 self.ui.line_name.setFocus()
-                self.ui.tableWidget.setRowCount(0)
                 return flag
 
             except:
@@ -139,7 +153,8 @@ class Create_data(QMainWindow):
                  \n\n'Зберегти дані' - список даних записується у файл.")
 
     def show_FAQ_date(self):
-        self.msg("Information", "Потрібно ввести день та місяць народження та натисніть 'Перевірити дату', щоб дані записувалися на дату, зазначену в полі.")
+        self.msg("Information", "Потрібно ввести день та місяць народження та натисніть 'Перевірити дату', щоб дані записувалися на дату, зазначену в полі.\
+                                \nНа одну дату можливо ввести безліч імен.")
 
     def show_FAQ_path(self):
         self.msg("Information", "Щоб зберегти файл, натисніть '...', щоб вказати папку, де зберегти файл (при виборі папки файли в ній не відображаються).\

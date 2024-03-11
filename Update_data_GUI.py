@@ -129,10 +129,9 @@ class Update_data(QMainWindow):
         keys = list(self.dict_birth.keys())
         values = list(self.dict_birth.values())
 
-        kol_date = len(keys)
         kol_zapis = sum([len(i) for i in values])
 
-        self.ui.label_info_date_in_file.setText(f"Кількість дат зчитаних з файлу: {kol_date};\
+        self.ui.label_info_date_in_file.setText(f"Кількість дат зчитаних з файлу: {len(keys)};\
                                                 \nКількість записів зчитаних з файлу: {kol_zapis}.")
 
     def btn_clear_date_in_line(self):

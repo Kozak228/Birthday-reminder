@@ -46,13 +46,14 @@ class MainWindow(QMainWindow):
 
         self.ui.pushButton_exit.clicked.connect(self.btn_app_exit)
         self.ui.pushButton_setting.clicked.connect(self.setting_win)
-        self.ui.calendarWidget.clicked[QDate].connect(self.show_date)
         self.ui.pushButton_FAQ_path.clicked.connect(self.show_FAQ_path)
         self.ui.pushButton_path_file.clicked.connect(self.path_folder)
         self.ui.pushButton_create_file.clicked.connect(self.create_file)
         self.ui.pushButton_update_file.clicked.connect(self.update_file)
         self.ui.pushButton_stop_timer.clicked.connect(self.stop_timer)
-        self.ui.line_path.textChanged.connect(lambda text: self.ui.pushButton_clear.setEnabled(bool(text)))  
+        self.ui.pushButton_clear.clicked.connect(self.btn_clear_path)
+        self.ui.calendarWidget.clicked[QDate].connect(self.show_date)
+        self.ui.line_path.textChanged.connect(lambda text: self.ui.pushButton_clear.setEnabled(bool(text)))
 
         self.reload_exist()
         self.read_config()
@@ -192,6 +193,10 @@ class MainWindow(QMainWindow):
             self.setFixedHeight(358)
             self.ui.groupBox_3.show()
             self.timer.start(1000)
+
+    def btn_clear_path(self):
+        self.ui.line_path.setText('')
+        self.reload_exist()
 
     def show_date(self, date_witg):
         self.ui.listWidget.clear()
