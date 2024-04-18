@@ -7,8 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>416</width>
-    <height>92</height>
+    <height>269</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>8</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Setting</string>
@@ -69,7 +74,17 @@ QCheckBox::indicator:checked {
                             stop:1 rgba(0, 64, 0, 255));
 }
 QCheckBox:checked, QCheckBox::indicator:checked {
-    border-color: black black white white;
+ 	border-color: black black white white;
+}
+
+QSpinBox {
+  	background: #474747;
+  	color: yellow;
+  	border: 1px dashed #00FFFF;
+}
+
+QLabel{
+	color:#FF4500;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -77,7 +92,7 @@ QCheckBox:checked, QCheckBox::indicator:checked {
     <property name="geometry">
      <rect>
       <x>352</x>
-      <y>59</y>
+      <y>234</y>
       <width>59</width>
       <height>28</height>
      </rect>
@@ -86,7 +101,7 @@ QCheckBox:checked, QCheckBox::indicator:checked {
      <string>Зберегти</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_2">
+   <widget class="QCheckBox" name="checkBox_collapse_window">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -113,7 +128,7 @@ QCheckBox:checked, QCheckBox::indicator:checked {
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_FAQ_check_1">
+   <widget class="QPushButton" name="pushButton_FAQ_autorun">
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -136,7 +151,7 @@ QCheckBox:checked, QCheckBox::indicator:checked {
      <string>?</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_FAQ_check_2">
+   <widget class="QPushButton" name="pushButton_FAQ_collapse_window">
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -159,7 +174,7 @@ QCheckBox:checked, QCheckBox::indicator:checked {
      <string>?</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox">
+   <widget class="QCheckBox" name="checkBox_autorun">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -184,6 +199,216 @@ QCheckBox:checked, QCheckBox::indicator:checked {
     </property>
     <property name="tristate">
      <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_FAQ_list_birth_future">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>160</y>
+      <width>38</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>?</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_FAQ_list_birth_last">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>110</y>
+      <width>38</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>?</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_list_birth_future">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>281</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Інформація про майбутні дні народження</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_list_birth_last">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>275</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Інформація про минулі дні народження</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_minutes">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>234</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="maximum">
+     <number>100000</number>
+    </property>
+    <property name="value">
+     <number>2</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBox_seconds">
+    <property name="geometry">
+     <rect>
+      <x>108</x>
+      <y>234</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="maximum">
+     <number>59</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_min">
+    <property name="geometry">
+     <rect>
+      <x>16</x>
+      <y>201</y>
+      <width>67</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Хвилини</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_sec">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>201</y>
+      <width>67</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Секунди</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_FAQ_timer">
+    <property name="geometry">
+     <rect>
+      <x>301</x>
+      <y>234</y>
+      <width>38</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>?</string>
     </property>
    </widget>
   </widget>

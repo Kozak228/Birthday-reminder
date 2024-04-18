@@ -7,6 +7,7 @@ from time import strptime
 from Time_date_format import date_optimization
 from Proverka import proverka_dir
 from Write_file import write_file
+from Sorted import sort_data
 
 class Create_data(QMainWindow):
     def __init__(self, file_name):
@@ -52,7 +53,9 @@ class Create_data(QMainWindow):
         path_dir = self.ui.line_path.text().strip()
 
         self.file_path = proverka_dir(path_dir)
-        write_file(self.dict_birth, self.file_name, self.file_path)
+        sorted_dict = sort_data(self.dict_birth, 'dict')
+
+        write_file(sorted_dict, self.file_name, self.file_path)
 
         self.msg("Information", f"Файл збережено! Розташування\n{self.file_path}{self.file_name}.json.")
 

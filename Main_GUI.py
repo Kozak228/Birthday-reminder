@@ -12,9 +12,10 @@ from Setting_GUI import Setting
 
 from Time_date_format import add_zero, s_in_m_s
 from Proverka import proverka_file, proverka_dir, proverka_path_in_config, proverka_path_in_icons_dir
-from Read_file import read_file, read_config
-from Write_file import write_config
+from Read_file import read_file
+from Write_file import write_file
 from Loging_error import logger_init
+from Sorted import sort_data
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -23,10 +24,10 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.file_name = "List of happy birthdays"
-        self.file_config = "Config" 
+        self.name_file_config = "Config"
         self.dir_name_config = "Birthday reminder"
         self.dict_birth = {}
-        self.all_sec = 300
+        self.all_sec = 120
 
         logger_init('app')
 
@@ -35,7 +36,9 @@ class MainWindow(QMainWindow):
 
         self.path_dir_icons = proverka_path_in_icons_dir()
 
-        self.checked_checkbox = self.checked_checkbox_2 = False
+        self.checked_checkbox_autorun, self.checked_checkbox_collapse_window = False, False
+        self.checked_checkbox_list_birth_last, self.checked_checkbox_list_birth_future = False, False
+        self.spinbox_min, self.spinbox_sec = 2, 0
 
         self.ui.pushButton_clear.setEnabled(False)
         self.ui.pushButton_update_file.setEnabled(False)
@@ -58,6 +61,10 @@ class MainWindow(QMainWindow):
         self.reload_exist()
         self.read_config()
 
+        self.setting_window = Setting(self.checked_checkbox_autorun, self.checked_checkbox_collapse_window,
+                                      self.checked_checkbox_list_birth_last, self.checked_checkbox_list_birth_future,
+                                      self.spinbox_min, self.spinbox_sec)
+
         self.setWindowIcon(QIcon(f"{self.path_dir_icons}birth.ico"))
         self.tray_icon = QSystemTrayIcon(QIcon(f"{self.path_dir_icons}birth.ico"))        
 
@@ -68,14 +75,15 @@ class MainWindow(QMainWindow):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.show_timer)
 
-        self.setting_window = Setting(self.checked_checkbox, self.checked_checkbox_2)
+        self.change_size_window()
+        self.show_last_and_future_data()
 
         self.run_app_in_collapse()
 
         self.create_data_window = Create_data(self.file_name)
 
-        date = self.ui.calendarWidget.selectedDate().toString('dd.MM.yyyy')
-        self.ui.label_info.setText(f"{date}\nвідзначає День Народження.")
+        date = self.ui.calendarWidget.selectedDate().toString('dd.MM')
+        self.ui.label_info_birth_now.setText(f"{date}\nвідзначає День Народження.")
 
     def welcome_app(self):
         if not proverka_path_in_config(self.dir_name_config, True):
@@ -96,7 +104,86 @@ class MainWindow(QMainWindow):
         self.timer.stop()
         self.msg("Information", "Закриття додатку скасовано.")
         self.ui.groupBox_3.hide()
-        self.setFixedHeight(340)
+        self.change_size_window()
+
+    def change_size_window(self):
+        if not self.timer.isActive() and not self.setting_window.ui.checkBox_list_birth_last.isChecked() and not \
+                self.setting_window.ui.checkBox_list_birth_future.isChecked():
+
+            self.ui.label_info_birth_last.hide()
+            self.ui.listWidget_birth_last.hide()
+            self.ui.label_info_birth_future.hide()
+            self.ui.listWidget_birth_future.hide()
+
+            self.setFixedHeight(340)
+            self.ui.label_info_birth_now.move(333, 160)
+            self.ui.listWidget_birth_now.move(332, 204)
+            self.ui.pushButton_exit.move(514, 304)
+            self.ui.pushButton_setting.move(418, 304)
+
+        elif self.timer.isActive() and not self.setting_window.ui.checkBox_list_birth_last.isChecked() and not \
+                self.setting_window.ui.checkBox_list_birth_future.isChecked():
+
+            self.ui.label_info_birth_last.hide()
+            self.ui.listWidget_birth_last.hide()
+            self.ui.label_info_birth_future.hide()
+            self.ui.listWidget_birth_future.hide()
+
+            self.setFixedHeight(358)
+            self.ui.label_info_birth_now.move(333, 160)
+            self.ui.listWidget_birth_now.move(332, 204)
+            self.ui.pushButton_exit.move(514, 321)
+            self.ui.pushButton_setting.move(418, 321)
+
+        elif self.setting_window.ui.checkBox_list_birth_last.isChecked() and not \
+                self.setting_window.ui.checkBox_list_birth_future.isChecked():
+
+            self.ui.label_info_birth_last.show()
+            self.ui.listWidget_birth_last.show()
+            self.ui.label_info_birth_future.hide()
+            self.ui.listWidget_birth_future.hide()
+
+            self.setFixedHeight(420)
+            self.ui.label_info_birth_last.move(333, 160)
+            self.ui.listWidget_birth_last.move(332, 204)
+            self.ui.label_info_birth_now.move(333, 276)
+            self.ui.listWidget_birth_now.move(332, 316)
+            self.ui.pushButton_exit.move(514, 387)
+            self.ui.pushButton_setting.move(418, 387)
+
+        elif not self.setting_window.ui.checkBox_list_birth_last.isChecked() and \
+                self.setting_window.ui.checkBox_list_birth_future.isChecked():
+
+            self.ui.label_info_birth_last.hide()
+            self.ui.listWidget_birth_last.hide()
+            self.ui.label_info_birth_future.show()
+            self.ui.listWidget_birth_future.show()
+
+            self.setFixedHeight(420)
+            self.ui.label_info_birth_now.move(333, 160)
+            self.ui.listWidget_birth_now.move(332, 204)
+            self.ui.label_info_birth_future.move(333, 276)
+            self.ui.listWidget_birth_future.move(332, 316)
+            self.ui.pushButton_exit.move(514, 387)
+            self.ui.pushButton_setting.move(418, 387)
+
+        elif self.setting_window.ui.checkBox_list_birth_last.isChecked() and \
+                self.setting_window.ui.checkBox_list_birth_future.isChecked():
+
+            self.ui.label_info_birth_last.show()
+            self.ui.listWidget_birth_last.show()
+            self.ui.label_info_birth_future.show()
+            self.ui.listWidget_birth_future.show()
+
+            self.setFixedHeight(540)
+            self.ui.label_info_birth_last.move(333, 160)
+            self.ui.listWidget_birth_last.move(332, 204)
+            self.ui.label_info_birth_now.move(333, 276)
+            self.ui.listWidget_birth_now.move(332, 316)
+            self.ui.label_info_birth_future.move(333, 390)
+            self.ui.listWidget_birth_future.move(332, 430)
+            self.ui.pushButton_exit.move(514, 501)
+            self.ui.pushButton_setting.move(418, 501)
 
     def create_file(self):
         self.hide()
@@ -110,6 +197,7 @@ class MainWindow(QMainWindow):
         self.ui.line_path.setText(self.create_data_window.file_path)
         self.create_data_window.close()
         self.reload_exist()
+        self.show_last_and_future_data()
         self.show()
 
     def update_file(self):
@@ -123,9 +211,9 @@ class MainWindow(QMainWindow):
 
     def return_main_with_update_data_window(self):
         self.update_data_window.close()
+        self.reload_exist()
+        self.show_last_and_future_data()
         self.show()
-        self.read_with_file(self.file_name, self.path_file)
-        self.show_date(self.ui.calendarWidget.selectedDate())
 
     def setting_win(self):
         self.hide()
@@ -137,6 +225,9 @@ class MainWindow(QMainWindow):
 
     def return_main_with_setting_window(self):
         self.setting_window.close()
+        self.change_size_window()
+        self.reload_exist()
+        self.show_last_and_future_data()
         self.show()
 
     def reload_exist(self):
@@ -174,12 +265,141 @@ class MainWindow(QMainWindow):
         self.path_file = proverka_dir(path_file)
         self.path_cofig = proverka_path_in_config(self.dir_name_config)
 
+    def show_last_and_future_data(self):
+        date = self.ui.calendarWidget.selectedDate().toString('dd.MM')
+
+        if self.dict_birth:
+            all_dates_birth = list(self.dict_birth.keys())
+
+            all_dates_birth.append(date)
+
+            if len(all_dates_birth) > 2:
+
+                sorted_all_dates = sort_data(all_dates_birth)
+
+                index_date_now = sorted_all_dates.index(date)
+
+                if self.setting_window.ui.checkBox_list_birth_last.isChecked():
+                    if index_date_now - 1 >= 0:
+                        past_date = sorted_all_dates[index_date_now - 1]
+                    else:
+                        past_date = sorted_all_dates[sorted_all_dates.index(sorted_all_dates[-1])]
+
+                    birth_list_last = self.dict_birth.get(past_date, [])
+
+                    if birth_list_last:
+                        self.ui.listWidget_birth_last.clear()
+                        self.ui.label_info_birth_last.setText(f"{past_date}\nсвяткував День Народження.")
+                        self.ui.listWidget_birth_last.addItems(birth_list_last)
+                    else:
+                        self.ui.listWidget_birth_last.clear()
+                        self.ui.label_info_birth_last.setText('Даних немає')
+
+                if self.setting_window.ui.checkBox_list_birth_future.isChecked():
+                    if index_date_now + 1 <= len(sorted_all_dates) - 1:
+                        future_date = sorted_all_dates[index_date_now + 1]
+                    else:
+                        future_date = sorted_all_dates[0]
+
+                    birth_list_future = self.dict_birth.get(future_date, [])
+
+                    if birth_list_future:
+                        self.ui.listWidget_birth_future.clear()
+                        self.ui.label_info_birth_future.setText(f"{future_date}\nсвяткуватиме День Народження.")
+                        self.ui.listWidget_birth_future.addItems(birth_list_future)
+                    else:
+                        self.ui.listWidget_birth_future.clear()
+                        self.ui.label_info_birth_future.setText('Даних немає')
+
+            elif len(all_dates_birth) == 2:
+                sorted_all_dates = sort_data(all_dates_birth)
+
+                index_date_now = sorted_all_dates.index(date)
+
+                if not self.setting_window.ui.checkBox_list_birth_last.isChecked() and \
+                    self.setting_window.ui.checkBox_list_birth_future.isChecked():
+
+                    if index_date_now + 1 <= len(sorted_all_dates) - 1:
+                        future_date = sorted_all_dates[index_date_now + 1]
+
+                        birth_list_future = self.dict_birth.get(future_date, [])
+
+                        if birth_list_future:
+                            self.ui.listWidget_birth_future.clear()
+                            self.ui.label_info_birth_future.setText(f"{future_date}\nсвяткуватиме День Народження.")
+                            self.ui.listWidget_birth_future.addItems(birth_list_future)
+                        else:
+                            self.ui.listWidget_birth_future.clear()
+                            self.ui.label_info_birth_future.setText('Даних немає')
+
+                if self.setting_window.ui.checkBox_list_birth_last.isChecked() and not \
+                        self.setting_window.ui.checkBox_list_birth_future.isChecked():
+
+                    if index_date_now - 1 >= 0:
+                        past_date = sorted_all_dates[index_date_now - 1]
+
+                        birth_list_last = self.dict_birth.get(past_date, [])
+
+                        if birth_list_last:
+                            self.ui.listWidget_birth_last.clear()
+                            self.ui.label_info_birth_last.setText(f"{past_date}\nсвяткував День Народження.")
+                            self.ui.listWidget_birth_last.addItems(birth_list_last)
+                        else:
+                            self.ui.listWidget_birth_last.clear()
+                            self.ui.label_info_birth_last.setText('Даних немає')
+
+                if self.setting_window.ui.checkBox_list_birth_last.isChecked() and \
+                    self.setting_window.ui.checkBox_list_birth_future.isChecked():
+
+                    if index_date_now + 1 <= len(sorted_all_dates) - 1:
+                        future_date = sorted_all_dates[index_date_now + 1]
+
+                        birth_list_future = self.dict_birth.get(future_date, [])
+
+                        if birth_list_future:
+                            self.ui.listWidget_birth_future.clear()
+                            self.ui.label_info_birth_future.setText(f"{future_date}\nсвяткуватиме День Народження.")
+                            self.ui.listWidget_birth_future.addItems(birth_list_future)
+
+                            self.ui.listWidget_birth_last.clear()
+                            self.ui.label_info_birth_last.setText('Даних немає')
+                        else:
+                            self.ui.listWidget_birth_future.clear()
+                            self.ui.label_info_birth_future.setText('Даних немає')
+
+                    elif index_date_now - 1 >= 0:
+                        past_date = sorted_all_dates[index_date_now - 1]
+
+                        birth_list_last = self.dict_birth.get(past_date, [])
+
+                        if birth_list_last:
+                            self.ui.listWidget_birth_last.clear()
+                            self.ui.label_info_birth_last.setText(f"{past_date}\nсвяткував День Народження.")
+                            self.ui.listWidget_birth_last.addItems(birth_list_last)
+
+                            self.ui.listWidget_birth_future.clear()
+                            self.ui.label_info_birth_future.setText('Даних немає')
+                        else:
+                            self.ui.listWidget_birth_last.clear()
+                            self.ui.label_info_birth_last.setText('Даних немає')
+
+            else:
+                if self.setting_window.ui.checkBox_list_birth_last.isChecked() and \
+                        self.setting_window.ui.checkBox_list_birth_future.isChecked():
+
+                    self.ui.listWidget_birth_last.clear()
+                    self.ui.label_info_birth_last.setText('Даних немає')
+                    self.ui.listWidget_birth_future.clear()
+                    self.ui.label_info_birth_future.setText('Даних немає')
+
     def push_notifications(self):
         date = self.ui.calendarWidget.selectedDate().toString('dd.MM')
         birth_list = self.dict_birth.get(date, [])
 
+        self.show_last_and_future_data()
+
         if birth_list:
-            self.show_date(self.ui.calendarWidget.selectedDate())
+            self.show_date(date)
 
             self.showNormal()
             
@@ -190,40 +410,54 @@ class MainWindow(QMainWindow):
                 self.push_notification.show_toast(self.dir_name_config, "У твоїх друзів сьогодні День Народження! Не забудь привітати, тобі займе кілька хвилин, а їм буде приємно :)",
                                                    duration = 120, icon_path = f"{self.path_dir_icons}birth.ico", threaded=True)
         else:
-            self.setFixedHeight(358)
             self.ui.groupBox_3.show()
             self.timer.start(1000)
+            self.change_size_window()
 
     def btn_clear_path(self):
         self.ui.line_path.setText('')
         self.reload_exist()
+        self.show_last_and_future_data()
 
-    def show_date(self, date_witg):
-        self.ui.listWidget.clear()
-        date = date_witg.toString("dd.MM")
+    def show_date(self, date_wtg):
+        self.ui.listWidget_birth_now.clear()
+        date = date_wtg.toString('dd.MM')
 
-        self.ui.label_info.setText(f"{date_witg.toString('dd.MM.yyyy')}\nвідзначає День Народження.")
-        self.ui.listWidget.addItems(self.dict_birth.get(date, []))
+        self.ui.label_info_birth_now.setText(f"{date}\nвідзначає День Народження.")
+        self.ui.listWidget_birth_now.addItems(self.dict_birth.get(date, []))
 
     def read_config(self):
-        data_config = read_config(self.file_config, self.path_cofig)
+        data_config = read_file(self.name_file_config, self.path_cofig)
 
         if data_config:
-            checked_checkbox, checked_checkbox_2, file_path, self.path_dir_icons = data_config
+            self.checked_checkbox_autorun = data_config.get('checkbox_autorun')
+            self.checked_checkbox_collapse_window = data_config.get('checkbox_collapse_window')
+            self.checked_checkbox_list_birth_last = data_config.get('checkbox_list_birth_last')
+            self.checked_checkbox_list_birth_future = data_config.get('checkbox_list_birth_future')
+            file_path = data_config.get('path_file')
+            self.path_dir_icons = data_config.get('path_dir_icons')
+            self.spinbox_min, self.spinbox_sec = data_config.get('timer_time')
+
+            self.all_sec = self.spinbox_min * 60 + self.spinbox_sec
+
             self.ui.line_path.setText(file_path)
-            
-            self.checked_checkbox = True if checked_checkbox == 'True' else False
-            self.checked_checkbox_2 = True if checked_checkbox_2 == 'True' else False
             self.reload_exist()
 
     def data_capture_for_config(self):
-        data_cfg = [self.setting_window.ui.checkBox.isChecked(), self.setting_window.ui.checkBox_2.isChecked(), self.path_file[:self.path_file.rindex("\\")], 
-                    self.path_dir_icons]
+        data_config = {}
+
+        data_config['checkbox_autorun'] = self.setting_window.ui.checkBox_autorun.isChecked()
+        data_config['checkbox_collapse_window'] = self.setting_window.ui.checkBox_collapse_window.isChecked()
+        data_config['path_file'] = self.path_file[:self.path_file.rindex("\\")]
+        data_config['path_dir_icons'] = self.path_dir_icons
+        data_config['checkbox_list_birth_last'] = self.setting_window.ui.checkBox_list_birth_last.isChecked()
+        data_config['checkbox_list_birth_future'] = self.setting_window.ui.checkBox_list_birth_future.isChecked()
+        data_config['timer_time'] = [self.setting_window.ui.spinBox_minutes.value(), self.setting_window.ui.spinBox_seconds.value()]
         
-        return data_cfg
+        return data_config
 
     def run_app_in_collapse(self):
-        if self.setting_window.ui.checkBox_2.isChecked():
+        if self.setting_window.ui.checkBox_collapse_window.isChecked():
             self.showMinimized()
 
             self.push_notifications()
@@ -285,7 +519,7 @@ class MainWindow(QMainWindow):
             self.exit_app()
 
     def exit_app(self):
-        write_config(self.data_capture_for_config(), self.file_config, self.path_cofig)
+        write_file(self.data_capture_for_config(), self.name_file_config, self.path_cofig)
         QApplication.instance().quit
         exit()
 

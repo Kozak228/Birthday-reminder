@@ -8,6 +8,7 @@ from Time_date_format import date_optimization
 from Proverka import proverka_dir
 from Write_file import write_file
 from Read_file import read_file
+from Sorted import sort_data
 
 class Update_data(QMainWindow):
     def __init__(self, file_name, file_path):
@@ -61,9 +62,11 @@ class Update_data(QMainWindow):
         path_dir = self.ui.line_path.text().strip()
 
         self.file_path = proverka_dir(path_dir)
-        write_file(self.dict_birth, self.file_name, self.file_path)
+        sorted_dict = sort_data(self.dict_birth, 'dict')
 
-        self.msg("Information", "Дані оновлені.")
+        write_file(sorted_dict, self.file_name, self.file_path)
+
+        self.msg("Information", "Дані оновлені та збережені.")
 
     def read_data_with_file(self):
         self.dict_birth = read_file(self.file_name, self.file_path)
@@ -73,7 +76,7 @@ class Update_data(QMainWindow):
 
         self.load_info_in_date()
         self.msg("Information", f"Дані на {self.date} видалені.\
-                 \n\nНе забудьте зберегти дані!")
+                 \n\nПеред закриттям вікна не забудьте зберегти дані!")
         
         self.load_info_date_in_file()
         self.ui.tableWidget.setRowCount(0)

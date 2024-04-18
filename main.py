@@ -7,13 +7,14 @@ from win10toast import ToastNotifier
 
 from Main_GUI import MainWindow
 from Proverka import proverka_path_in_icons_dir, proverka_path_in_config
-from Read_file import read_config
+from Read_file import read_file
 
 def read_path_dir_icon():
     path_config_isexists = proverka_path_in_config("Birthday reminder", True)
 
     if path_config_isexists:
-        path_dir_icon = read_config("Config", proverka_path_in_config("Birthday reminder"))[3]
+        data = read_config("Config", proverka_path_in_config("Birthday reminder"))
+        path_dir_icon = data.get("path_dir_icons")
     else:
         path_dir_icon = proverka_path_in_icons_dir()
 
