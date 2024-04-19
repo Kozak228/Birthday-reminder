@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_update_file.clicked.connect(self.update_file)
         self.ui.pushButton_stop_timer.clicked.connect(self.stop_timer)
         self.ui.pushButton_clear.clicked.connect(self.btn_clear_path)
-        self.ui.calendarWidget.clicked[QDate].connect(self.show_date)
+        self.ui.calendarWidget.clicked[QDate].connect(self.show_date_select_wdg)
         self.ui.line_path.textChanged.connect(lambda text: self.ui.pushButton_clear.setEnabled(bool(text)))
 
         self.reload_exist()
@@ -265,8 +265,11 @@ class MainWindow(QMainWindow):
         self.path_file = proverka_dir(path_file)
         self.path_cofig = proverka_path_in_config(self.dir_name_config)
 
-    def show_last_and_future_data(self):
-        date = self.ui.calendarWidget.selectedDate().toString('dd.MM')
+    def show_last_and_future_data(self, date_wdg=''):
+        if date_wdg != '':
+            date = date_wdg
+        else:
+            date = self.ui.calendarWidget.selectedDate().toString('dd.MM')
 
         if self.dict_birth:
             all_dates_birth = list(self.dict_birth.keys())
@@ -419,9 +422,18 @@ class MainWindow(QMainWindow):
         self.reload_exist()
         self.show_last_and_future_data()
 
-    def show_date(self, date_wtg):
+    def show_date_select_wdg(self, date_wdg):
         self.ui.listWidget_birth_now.clear()
-        date = date_wtg.toString('dd.MM')
+        date = date_wdg.toString('dd.MM')
+
+        self.ui.label_info_birth_now.setText(f"{date}\nвідзначає День Народження.")
+        self.ui.listWidget_birth_now.addItems(self.dict_birth.get(date, []))
+
+        self.show_last_and_future_data(date)
+
+    def show_date(self, date):
+        self.ui.listWidget_birth_now.clear()
+        date = date.toString('dd.MM')
 
         self.ui.label_info_birth_now.setText(f"{date}\nвідзначає День Народження.")
         self.ui.listWidget_birth_now.addItems(self.dict_birth.get(date, []))
