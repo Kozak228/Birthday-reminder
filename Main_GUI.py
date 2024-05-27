@@ -276,122 +276,41 @@ class MainWindow(QMainWindow):
 
             all_dates_birth.append(date)
 
-            if len(all_dates_birth) > 2:
+            all_dates_birth = list(set(all_dates_birth))
 
-                sorted_all_dates = sort_data(all_dates_birth)
+            sorted_all_dates = sort_data(all_dates_birth)
 
-                index_date_now = sorted_all_dates.index(date)
+            index_date_now = sorted_all_dates.index(date)
 
-                if self.setting_window.ui.checkBox_list_birth_last.isChecked():
-                    if index_date_now - 1 >= 0:
-                        past_date = sorted_all_dates[index_date_now - 1]
-                    else:
-                        past_date = sorted_all_dates[sorted_all_dates.index(sorted_all_dates[-1])]
+            if self.setting_window.ui.checkBox_list_birth_last.isChecked():
+                if index_date_now - 1 >= 0:
+                    past_date = sorted_all_dates[index_date_now - 1]
+                else:
+                    past_date = sorted_all_dates[sorted_all_dates.index(sorted_all_dates[-1])]
 
-                    birth_list_last = self.dict_birth.get(past_date, [])
+                birth_list_last = self.dict_birth.get(past_date, [])
 
-                    if birth_list_last:
-                        self.ui.listWidget_birth_last.clear()
-                        self.ui.label_info_birth_last.setText(f"{past_date}\nсвяткував День Народження.")
-                        self.ui.listWidget_birth_last.addItems(birth_list_last)
-                    else:
-                        self.ui.listWidget_birth_last.clear()
-                        self.ui.label_info_birth_last.setText('Даних немає')
-
-                if self.setting_window.ui.checkBox_list_birth_future.isChecked():
-                    if index_date_now + 1 <= len(sorted_all_dates) - 1:
-                        future_date = sorted_all_dates[index_date_now + 1]
-                    else:
-                        future_date = sorted_all_dates[0]
-
-                    birth_list_future = self.dict_birth.get(future_date, [])
-
-                    if birth_list_future:
-                        self.ui.listWidget_birth_future.clear()
-                        self.ui.label_info_birth_future.setText(f"{future_date}\nсвяткуватиме День Народження.")
-                        self.ui.listWidget_birth_future.addItems(birth_list_future)
-                    else:
-                        self.ui.listWidget_birth_future.clear()
-                        self.ui.label_info_birth_future.setText('Даних немає')
-
-            elif len(all_dates_birth) == 2:
-                sorted_all_dates = sort_data(all_dates_birth)
-
-                index_date_now = sorted_all_dates.index(date)
-
-                if not self.setting_window.ui.checkBox_list_birth_last.isChecked() and \
-                    self.setting_window.ui.checkBox_list_birth_future.isChecked():
-
-                    if index_date_now + 1 <= len(sorted_all_dates) - 1:
-                        future_date = sorted_all_dates[index_date_now + 1]
-
-                        birth_list_future = self.dict_birth.get(future_date, [])
-
-                        if birth_list_future:
-                            self.ui.listWidget_birth_future.clear()
-                            self.ui.label_info_birth_future.setText(f"{future_date}\nсвяткуватиме День Народження.")
-                            self.ui.listWidget_birth_future.addItems(birth_list_future)
-                        else:
-                            self.ui.listWidget_birth_future.clear()
-                            self.ui.label_info_birth_future.setText('Даних немає')
-
-                if self.setting_window.ui.checkBox_list_birth_last.isChecked() and not \
-                        self.setting_window.ui.checkBox_list_birth_future.isChecked():
-
-                    if index_date_now - 1 >= 0:
-                        past_date = sorted_all_dates[index_date_now - 1]
-
-                        birth_list_last = self.dict_birth.get(past_date, [])
-
-                        if birth_list_last:
-                            self.ui.listWidget_birth_last.clear()
-                            self.ui.label_info_birth_last.setText(f"{past_date}\nсвяткував День Народження.")
-                            self.ui.listWidget_birth_last.addItems(birth_list_last)
-                        else:
-                            self.ui.listWidget_birth_last.clear()
-                            self.ui.label_info_birth_last.setText('Даних немає')
-
-                if self.setting_window.ui.checkBox_list_birth_last.isChecked() and \
-                    self.setting_window.ui.checkBox_list_birth_future.isChecked():
-
-                    if index_date_now + 1 <= len(sorted_all_dates) - 1:
-                        future_date = sorted_all_dates[index_date_now + 1]
-
-                        birth_list_future = self.dict_birth.get(future_date, [])
-
-                        if birth_list_future:
-                            self.ui.listWidget_birth_future.clear()
-                            self.ui.label_info_birth_future.setText(f"{future_date}\nсвяткуватиме День Народження.")
-                            self.ui.listWidget_birth_future.addItems(birth_list_future)
-
-                            self.ui.listWidget_birth_last.clear()
-                            self.ui.label_info_birth_last.setText('Даних немає')
-                        else:
-                            self.ui.listWidget_birth_future.clear()
-                            self.ui.label_info_birth_future.setText('Даних немає')
-
-                    elif index_date_now - 1 >= 0:
-                        past_date = sorted_all_dates[index_date_now - 1]
-
-                        birth_list_last = self.dict_birth.get(past_date, [])
-
-                        if birth_list_last:
-                            self.ui.listWidget_birth_last.clear()
-                            self.ui.label_info_birth_last.setText(f"{past_date}\nсвяткував День Народження.")
-                            self.ui.listWidget_birth_last.addItems(birth_list_last)
-
-                            self.ui.listWidget_birth_future.clear()
-                            self.ui.label_info_birth_future.setText('Даних немає')
-                        else:
-                            self.ui.listWidget_birth_last.clear()
-                            self.ui.label_info_birth_last.setText('Даних немає')
-
-            else:
-                if self.setting_window.ui.checkBox_list_birth_last.isChecked() and \
-                        self.setting_window.ui.checkBox_list_birth_future.isChecked():
-
+                if birth_list_last:
+                    self.ui.listWidget_birth_last.clear()
+                    self.ui.label_info_birth_last.setText(f"{past_date}\nсвяткував День Народження.")
+                    self.ui.listWidget_birth_last.addItems(birth_list_last)
+                else:
                     self.ui.listWidget_birth_last.clear()
                     self.ui.label_info_birth_last.setText('Даних немає')
+
+            if self.setting_window.ui.checkBox_list_birth_future.isChecked():
+                if index_date_now + 1 <= len(sorted_all_dates) - 1:
+                    future_date = sorted_all_dates[index_date_now + 1]
+                else:
+                    future_date = sorted_all_dates[0]
+
+                birth_list_future = self.dict_birth.get(future_date, [])
+
+                if birth_list_future:
+                    self.ui.listWidget_birth_future.clear()
+                    self.ui.label_info_birth_future.setText(f"{future_date}\nсвяткуватиме День Народження.")
+                    self.ui.listWidget_birth_future.addItems(birth_list_future)
+                else:
                     self.ui.listWidget_birth_future.clear()
                     self.ui.label_info_birth_future.setText('Даних немає')
 
@@ -431,9 +350,13 @@ class MainWindow(QMainWindow):
 
         self.show_last_and_future_data(date)
 
-    def show_date(self, date):
+    def show_date(self, date_get):
         self.ui.listWidget_birth_now.clear()
-        date = date.toString('dd.MM')
+
+        if isinstance(date_get, str):
+            date = date_get
+        else:
+            date = date_get.toString('dd.MM')
 
         self.ui.label_info_birth_now.setText(f"{date}\nвідзначає День Народження.")
         self.ui.listWidget_birth_now.addItems(self.dict_birth.get(date, []))
